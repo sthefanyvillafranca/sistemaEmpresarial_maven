@@ -1,0 +1,4 @@
+1|Migracion a la nube|2027-03-31|Pasar los servidores propios a infraestructura cloud|false
+2|Asistente interno de IA|2026-12-15|Chatbot para consultas de los empleados|true
+4|Portal del empleado|2027-06-30|Intranet para consultar nominas y proyectos|false
+5|Auditoria de seguridad|2026-11-30|Revision de accesos y contrasenas|true

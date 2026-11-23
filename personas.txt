@@ -1,0 +1,11 @@
+1|Ada|Lovelace|Calle Algoritmo 1, Madrid|Desarrolladora Senior
+2|Sam|Altman|Avenida de los Transformadores 404, San Francisco|CEO
+3|Ilya|Sutskever|Callejón del Backpropagation 99, Toronto|Arquitecto Jefe de Redes Neuronales
+4|Dario|Amodei|Bulevar de la Alineación Segura 42, San Francisco|Especialista en IA Constitucional
+5|Demis|Hassabis|Calle de Alcalá 15, 3º B, 28014 Madrid|Tech Lead de Investigación y Desarrollo
+6|Samuel|Altman|Paseo de la Castellana 89, Planta 12, 28046 Madrid|Product Manager Principal
+7|Yann|LeCun|Gran Vía 10, Ático, 28013 Madrid|Ingeniero DevOps y Sistemas
+8|Grace|Hopper|Calle COBOL 1, 28001 Madrid|Ingeniera de Compiladores
+9|Linus|Torvalds|Avenida del Kernel 2, Helsinki|Mantenedor Principal
+11|Margaret|Hamilton|Calle Apolo 11, 28010 Madrid|Ingeniera de Software
+12|Tim|Berners-Lee|Calle Churchill 1, Ginebra|Arquitecto de Protocolos

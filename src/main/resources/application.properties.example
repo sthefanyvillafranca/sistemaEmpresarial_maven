@@ -1,0 +1,6 @@
+# Plantilla de los datos de conexion de la aplicacion.
+# Copia este archivo como "application.properties" (en esta misma carpeta)
+# y rellena tu usuario y tu contrasena. El archivo real no se sube a GitHub.
+db.url=jdbc:mysql://localhost:3306/empresa_test
+db.user=
+db.pass=

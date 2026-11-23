@@ -1,0 +1,7 @@
+# Plantilla de los datos de conexion SOLO para los tests.
+# Copia este archivo como "application.properties" (en esta misma carpeta)
+# y rellena tu usuario y tu contrasena. El archivo real no se sube a GitHub.
+# OJO: los tests vacian las tablas, asi que la base debe terminar en "_test".
+db.url=jdbc:mysql://localhost:3306/empresa_test
+db.user=
+db.pass=
