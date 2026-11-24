@@ -81,18 +81,52 @@ class BaseDeDatosTest {
                 () -> BaseDeDatos.ejecutarSQL("INSERT INTO tabla_que_no_existe VALUES (1)"));
     }
 
+    // Los tres tests siguientes usan una variable del tipo de la INTERFAZ, no de la clase:
+    // solo sabe que "datos" tiene agregar, modificar y eliminar.
+    // Antes eran un solo test: si fallaba agregar, no se sabía nada de los otros dos.
+
     @Test
-    @DisplayName("A través de InterfaceDatos: agregar, modificar y eliminar devuelven las filas afectadas")
-    void agregarModificarYEliminarPorLaInterfaz() throws Exception {
-        // Arrange: la variable es del tipo de la INTERFAZ, no de la clase.
-        // Solo sabe que "datos" tiene agregar, modificar y eliminar.
+    @DisplayName("A través de InterfaceDatos: agregar devuelve 1 (una fila afectada)")
+    void agregarPorLaInterfazDevuelveUno() throws Exception {
+        // Arrange
         InterfaceDatos datos = new BaseDeDatos();
 
-        // Act + Assert
-        assertEquals(1, datos.agregar("INSERT INTO persona (nombre, apellidos, direccion, cargo) " +
-                "VALUES ('Ada', 'Lovelace', 'Madrid', 'Desarrolladora')"));
-        assertEquals(1, datos.modificar("UPDATE persona SET cargo = 'Jefa de equipo' WHERE nombre = 'Ada'"));
-        assertEquals(1, datos.eliminar("DELETE FROM persona WHERE nombre = 'Ada'"));
+        // Act
+        int filas = datos.agregar("INSERT INTO persona (nombre, apellidos, direccion, cargo) " +
+                "VALUES ('Ada', 'Lovelace', 'Madrid', 'Desarrolladora')");
+
+        // Assert
+        assertEquals(1, filas);
+    }
+
+    @Test
+    @DisplayName("A través de InterfaceDatos: modificar devuelve 1 (una fila afectada)")
+    void modificarPorLaInterfazDevuelveUno() throws Exception {
+        // Arrange: tiene que existir Ada para poder modificarla
+        InterfaceDatos datos = new BaseDeDatos();
+        datos.agregar("INSERT INTO persona (nombre, apellidos, direccion, cargo) " +
+                "VALUES ('Ada', 'Lovelace', 'Madrid', 'Desarrolladora')");
+
+        // Act
+        int filas = datos.modificar("UPDATE persona SET cargo = 'Jefa de equipo' WHERE nombre = 'Ada'");
+
+        // Assert
+        assertEquals(1, filas);
+    }
+
+    @Test
+    @DisplayName("A través de InterfaceDatos: eliminar devuelve 1 (una fila afectada)")
+    void eliminarPorLaInterfazDevuelveUno() throws Exception {
+        // Arrange: tiene que existir Ada para poder eliminarla
+        InterfaceDatos datos = new BaseDeDatos();
+        datos.agregar("INSERT INTO persona (nombre, apellidos, direccion, cargo) " +
+                "VALUES ('Ada', 'Lovelace', 'Madrid', 'Desarrolladora')");
+
+        // Act
+        int filas = datos.eliminar("DELETE FROM persona WHERE nombre = 'Ada'");
+
+        // Assert
+        assertEquals(1, filas);
     }
 
     @Test

@@ -88,48 +88,107 @@ class ServicioSqlTest {
 
     // ───────────────────────────── PROYECTO ─────────────────────────────
 
+    // Tres tests, uno por operación, igual que con Persona.
+    // Antes era un solo test: si fallaba el insertar, no se sabía
+    // si modificar y eliminar funcionaban.
+
     @Test
-    @DisplayName("Proyecto: insertar, modificar y eliminar")
-    void insertarModificarYEliminarProyecto() throws Exception {
-        // Insertar
+    @DisplayName("Proyecto: insertar y leer devuelve el proyecto con sus datos")
+    void insertarYLeerProyecto() throws Exception {
+        // Arrange
+        Proyecto web = new Proyecto("Web corporativa", LocalDate.of(2026, 12, 15), "Nueva web", false);
+
+        // Act
+        ServicioSql.insertarProyecto(web);
+        ArrayList<Proyecto> lista = ServicioSql.leerProyecto();
+
+        // Assert
+        assertEquals(1, lista.size());
+        assertEquals("Web corporativa", lista.get(0).getNombre());
+        assertEquals(LocalDate.of(2026, 12, 15), lista.get(0).getDeadLine());
+    }
+
+    @Test
+    @DisplayName("Proyecto: modificar devuelve 1 y el cambio queda guardado")
+    void modificarProyecto() throws Exception {
+        // Arrange: lo leemos de la base para tenerlo con el id que le dio MySQL
         ServicioSql.insertarProyecto(new Proyecto("Web corporativa", LocalDate.of(2026, 12, 15), "Nueva web", false));
         Proyecto web = ServicioSql.leerProyecto().get(0);
-        assertEquals("Web corporativa", web.getNombre());
-        assertEquals(LocalDate.of(2026, 12, 15), web.getDeadLine());
 
-        // Modificar
+        // Act
         web.setTerminado(true);
-        assertEquals(1, ServicioSql.modificarProyecto(web));
-        assertTrue(ServicioSql.leerProyecto().get(0).isTerminado());
+        int filas = ServicioSql.modificarProyecto(web);
 
-        // Eliminar
-        assertEquals(1, ServicioSql.eliminarProyecto(web));
+        // Assert: volvemos a leerlo de la base
+        assertEquals(1, filas);
+        assertTrue(ServicioSql.leerProyecto().get(0).isTerminado());
+    }
+
+    @Test
+    @DisplayName("Proyecto: eliminar devuelve 1 y el proyecto desaparece")
+    void eliminarProyecto() throws Exception {
+        // Arrange
+        ServicioSql.insertarProyecto(new Proyecto("Web corporativa", LocalDate.of(2026, 12, 15), "Nueva web", false));
+        Proyecto web = ServicioSql.leerProyecto().get(0);
+
+        // Act
+        int filas = ServicioSql.eliminarProyecto(web);
+
+        // Assert
+        assertEquals(1, filas);
         assertTrue(ServicioSql.leerProyecto().isEmpty());
     }
 
     // ─────────────────────── NOMINA y la relación 1:N ───────────────────────
 
     @Test
-    @DisplayName("Nomina: insertar, modificar y eliminar una nómina de una persona")
-    void insertarModificarYEliminarNomina() throws Exception {
+    @DisplayName("Nomina: insertar y leer devuelve la nómina con sus datos")
+    void insertarYLeerNomina() throws Exception {
         // Arrange: una nómina necesita una persona
         int idAda = guardarAdaYDevolverSuId();
 
-        // Insertar
+        // Act
+        ServicioSql.insertarNomina(new Nomina(new BigDecimal("1500.50"), 2026, "noviembre", idAda));
+        ArrayList<Nomina> lista = ServicioSql.leerNomina();
+
+        // Assert
+        assertEquals(1, lista.size());
+        assertEquals("noviembre", lista.get(0).getMes());
+        assertEquals(idAda, lista.get(0).getPersonaId());
+        // Con BigDecimal se compara con compareTo: devuelve 0 si valen lo mismo.
+        assertEquals(0, new BigDecimal("1500.50").compareTo(lista.get(0).getImporteFinal()));
+    }
+
+    @Test
+    @DisplayName("Nomina: modificar devuelve 1 y el cambio queda guardado")
+    void modificarNomina() throws Exception {
+        // Arrange: la leemos de la base para tenerla con el id que le dio MySQL
+        int idAda = guardarAdaYDevolverSuId();
         ServicioSql.insertarNomina(new Nomina(new BigDecimal("1500.50"), 2026, "noviembre", idAda));
         Nomina nomina = ServicioSql.leerNomina().get(0);
-        assertEquals("noviembre", nomina.getMes());
-        assertEquals(idAda, nomina.getPersonaId());
-        // Con BigDecimal se compara con compareTo: devuelve 0 si valen lo mismo.
-        assertEquals(0, new BigDecimal("1500.50").compareTo(nomina.getImporteFinal()));
 
-        // Modificar
+        // Act
         nomina.setMes("diciembre");
-        assertEquals(1, ServicioSql.modificarNomina(nomina));
-        assertEquals("diciembre", ServicioSql.leerNomina().get(0).getMes());
+        int filas = ServicioSql.modificarNomina(nomina);
 
-        // Eliminar
-        assertEquals(1, ServicioSql.eliminarNomina(nomina));
+        // Assert: volvemos a leerla de la base
+        assertEquals(1, filas);
+        assertEquals("diciembre", ServicioSql.leerNomina().get(0).getMes());
+    }
+
+    @Test
+    @DisplayName("Nomina: eliminar devuelve 1 y la nómina desaparece")
+    void eliminarNomina() throws Exception {
+        // Arrange
+        int idAda = guardarAdaYDevolverSuId();
+        ServicioSql.insertarNomina(new Nomina(new BigDecimal("1500.50"), 2026, "noviembre", idAda));
+        Nomina nomina = ServicioSql.leerNomina().get(0);
+
+        // Act
+        int filas = ServicioSql.eliminarNomina(nomina);
+
+        // Assert
+        assertEquals(1, filas);
         assertTrue(ServicioSql.leerNomina().isEmpty());
     }
 
@@ -182,20 +241,35 @@ class ServicioSqlTest {
     // ─────────────────── PERSONA_PROYECTO: la relación M:N ───────────────────
 
     @Test
-    @DisplayName("M:N - vincular una persona a un proyecto y quitar el vínculo")
-    void insertarYEliminarPersonaProyecto() throws Exception {
+    @DisplayName("M:N - vincular una persona a un proyecto devuelve 1 y el vínculo aparece")
+    void vincularPersonaProyecto() throws Exception {
         // Arrange
         int idAda = guardarAdaYDevolverSuId();
         int idWeb = guardarWebYDevolverSuId();
 
-        // Act + Assert: vincular
-        assertEquals(1, ServicioSql.insertarPersonaProyecto(idAda, idWeb));
+        // Act
+        int filas = ServicioSql.insertarPersonaProyecto(idAda, idWeb);
         ArrayList<String> vinculos = ServicioSql.leerPersonaProyectos();
+
+        // Assert
+        assertEquals(1, filas);
         assertEquals(1, vinculos.size());
         assertEquals("Persona: " + idAda + " - Proyecto: " + idWeb, vinculos.get(0));
+    }
 
-        // Act + Assert: quitar el vínculo
-        assertEquals(1, ServicioSql.deletePersonaProyecto(idAda, idWeb));
+    @Test
+    @DisplayName("M:N - quitar un vínculo que existe devuelve 1 y el vínculo desaparece")
+    void quitarVinculoPersonaProyecto() throws Exception {
+        // Arrange: la persona y el proyecto ya están vinculados
+        int idAda = guardarAdaYDevolverSuId();
+        int idWeb = guardarWebYDevolverSuId();
+        ServicioSql.insertarPersonaProyecto(idAda, idWeb);
+
+        // Act
+        int filas = ServicioSql.deletePersonaProyecto(idAda, idWeb);
+
+        // Assert
+        assertEquals(1, filas);
         assertTrue(ServicioSql.leerPersonaProyectos().isEmpty());
     }
 
