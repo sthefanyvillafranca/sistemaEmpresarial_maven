@@ -29,5 +29,9 @@ Por eso:
 - Sin base de datos: `PersonaTest`, `NominaTest`, `ProyectoTest`, `FicheroTest`.
 - Con base de datos: `BaseDeDatosTest`, `ServicioSqlTest`, `ServicioPersonaTest`,
   `ServicioNominaTest`, `ServicioProyectoTest`, `ServicioMaestroTest`.
-- Sin tests: los controladores, `Consola` y `Lector` (leen del teclado e imprimen).
+- De controlador, también con base de datos: `ControladorPersonaTest`, `ControladorProyectoTest`,
+  `ControladorNominaTest` y `ControladorMaestroTest`. Comprueban lo que queda en la base y lo que se
+  imprime por consola (`src/test/java/soporte/SalidaCapturada.java` guarda lo impreso).
+- Sin tests: los métodos de los controladores que leen del teclado, `ControladorFichero`,
+  `Consola` y `Lector`.
 - Los try/catch están en los controladores, no en los tests.

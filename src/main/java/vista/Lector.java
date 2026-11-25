@@ -13,16 +13,17 @@ public class Lector {
 
     public static int pedirNumero() {
 
-        int num;
+        int num = 0;
+        boolean valido = false;
 
-        while (true) {
+        while (!valido) {
             Consola.mostrarTextEspecifico("Seleccione una opción: ");
 
             try {
                 num = sc.nextInt();
                 sc.nextLine();// el next line consume lo sobrante en la linea de entrada,
                 // como un salto de linea, u otra cosa que no sea un numero.
-                return num; // regresa el número solo cuando es válido.
+                valido = true; // el bucle termina solo cuando el número es válido.
 
 
             } catch (InputMismatchException e) { // si scanner falla por ingresar valor incorrecto,
@@ -33,6 +34,8 @@ public class Lector {
 
             }
         }
+
+        return num;
     }
 
     public static int pedirNumeroParaObjeto() {
@@ -54,14 +57,15 @@ public class Lector {
     }
 
     public static int pedirNumSimple() {
-        int num;
+        int num = 0;
+        boolean valido = false;
 
-        while (true) {
+        while (!valido) {
             try {
                 num = sc.nextInt();
                 sc.nextLine();
                 if (num >= 0) {
-                    return num;
+                    valido = true;
                 } else {
                     Consola.mostrarNumInvalido();
                 }
@@ -71,6 +75,7 @@ public class Lector {
             }
         }
 
+        return num;
     }
 
     /**
@@ -91,19 +96,21 @@ public class Lector {
      * @return LocalDate
      */
     public static LocalDate pedirDate() { //2026-11-02 (yyyy-MM-dd).
-        LocalDate date;
-        while (true) {
+        LocalDate date = null;
+        boolean valido = false;
+        while (!valido) {
             Consola.mostrarTextEspecifico("Escribe una fecha: ");
             try {
                 date = LocalDate.parse(sc.nextLine()); //doc: parse Obtains an instance of LocalDate
                 // from a text string such as 2007-12-03.
                 // por lo que puedes poner un nextline dentro de parse
-                return date;
+                valido = true;
 
             } catch (DateTimeParseException exception) {
                 Consola.mostrarTextEspecifico("Debes ingresar un formato de fecha válido 2026-11-02 (yyyy-MM-dd)");
             }
         }
+        return date;
     } // en este metodo el comportamiento es muy diferente a cuando uso el next int
     // pues si una persona escribe "gatitos" en vez de un numero cuando uso el next int
     // ocurre un error y esa entrada nunca se consume, por eso en pedirNumero se mete un nextline
