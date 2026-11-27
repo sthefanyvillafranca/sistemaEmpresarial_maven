@@ -393,7 +393,7 @@ public class BaseDeDatos implements InterfaceDatos {
                     sentenciaSql.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace(); //fuga de información y se salta a la vista
+                e.printStackTrace(); //
             }
 
             try {
