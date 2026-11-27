@@ -44,7 +44,7 @@ public class BaseDeDatos implements InterfaceDatos {
                     fichero.close();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                e.printStackTrace(); // fuga de información
             }
         }
 
@@ -78,7 +78,7 @@ public class BaseDeDatos implements InterfaceDatos {
                     sentenciaSql.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                e.printStackTrace(); //fuga de información
             }
             try {
                 if (conexion != null) {
@@ -142,7 +142,7 @@ public class BaseDeDatos implements InterfaceDatos {
                     respuesta.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                e.printStackTrace(); // fuga de información
             }
 
             try {
@@ -150,7 +150,7 @@ public class BaseDeDatos implements InterfaceDatos {
                     sentenciaSql.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                e.printStackTrace(); // fuga de información
             }
 
             try {
@@ -196,7 +196,7 @@ public class BaseDeDatos implements InterfaceDatos {
                     respuesta.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                e.printStackTrace(); // fuga de información y se salta la vista
             }
 
             try {
@@ -257,7 +257,7 @@ public class BaseDeDatos implements InterfaceDatos {
                     sentenciaSql.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                e.printStackTrace(); // fuga de información
             }
 
             try {
@@ -331,7 +331,7 @@ public class BaseDeDatos implements InterfaceDatos {
                     respuesta.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                e.printStackTrace(); //fuga de información y se salta a la vista
             }
 
             try {
@@ -383,7 +383,7 @@ public class BaseDeDatos implements InterfaceDatos {
             try {
                 if (respuesta != null) {
                     respuesta.close();
-                }
+                }  //sjadk
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -393,7 +393,7 @@ public class BaseDeDatos implements InterfaceDatos {
                     sentenciaSql.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                e.printStackTrace(); //fuga de información y se salta a la vista
             }
 
             try {
@@ -412,6 +412,25 @@ public class BaseDeDatos implements InterfaceDatos {
 } // llave final
 
 
-// "SELECT ID,NOMBRE,Apellidos,Direccion,cargo FROM persona";
+/// ----------------------------------------------------------------------------------
+////Fuga de información
+// Es lo que me dice SonarQube. Le pregunté a la IA, y me dijo:
+// "Fuga de información (information disclosure).
+// En tu captura de Sonar, el aviso llevaba las etiquetas cwe y debug:
+// CWE es un catálogo público de debilidades de software,
+// y esta figura ahí como "código de depuración activo".
+/**
+ * Debilidad: algo en el código que podría aprovecharse. El printStackTrace() es esto.
+ * Vulnerabilidad: una debilidad que alguien puede explotar de verdad para hacer daño.
+ *
+ * Esta debilidad por sí sola no deja entrar a nadie ni cambiar nada.
+ * Lo que hace es darle pistas a quien quiera atacar.
+ * Por eso Sonar la pone en seguridad, pero con gravedad baja.
+ */
+/// -----------------------------------------------------------------------------------
 
+
+
+
+// "SELECT ID,NOMBRE,Apellidos,Direccion,cargo FROM persona";
 // INSERT INTO persona(Nombre, Apellidos,Direccion, cargo) VALUES ('Ada', 'Lovelace', 'Calle Algoritmo 1, Madrid', 'Desarrolladora Senior')
