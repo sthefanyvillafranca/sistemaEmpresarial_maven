@@ -397,7 +397,7 @@ public class BaseDeDatos implements InterfaceDatos {
             }
 
             try {
-                if (conexion != null) {
+                if (conexion != null) { // committ de prueba
                     conexion.close();
                 }
             } catch (SQLException e) {
